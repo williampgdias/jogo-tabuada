@@ -3,7 +3,7 @@ const respostasEl = document.getElementById('respostas');
 const cronometroEl = document.getElementById('cronometro');
 const feedbackEl = document.getElementById('feedback');
 
-let = 10;
+let tempo = 10;
 let timer;
 let respostaCorreta = 0;
 
@@ -32,4 +32,17 @@ function gerarPergunta() {
     //6.Resetar feedback e cronômetro
     feedbackEl.textContent = '';
     iniciarCronometro();
+}
+
+function calcular(a, b, op) {
+    switch (op) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
+        case '/':
+            return parseFloat((a / b).toFixed(2));
+    }
 }
