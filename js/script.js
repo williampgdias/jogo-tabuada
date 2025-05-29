@@ -46,3 +46,58 @@ function calcular(a, b, op) {
             return parseFloat((a / b).toFixed(2));
     }
 }
+
+function gerarRespostas(correta) {
+    respostasEl.innerHTML = ''; // Limpar respostas anteriores
+
+    const respostas = new Set();
+    respostas.add(correta);
+
+    while (respostas.size < 4) {
+        let erro = correta + Math.floor(Math.random() * 10 - 5);
+        if (erro !== correta && erro >= 0) {
+            respostas.add(erro);
+        }
+    }
+
+    // Embaralha as respostas
+    const embaralhadas = Array.from(respostas).sort(() => Math.random() - 0.5);
+
+    embaralhadas.forEach((resposta) => {
+        const btn = document.createElement('button');
+        btn.textContent = resposta;
+        btn.addEventListener('click', () => verificarResposta(resposta));
+        respostasEl.appendChild(btn);
+    });
+}
+
+function verificarResposta(resposta) {
+    clearInterval(timer); // Parar o cronômetro
+
+    if (Number(resposta).toFixed(2) === Number(respostaCorreta).toFixed(2)) {
+        feedbackEl.textContent = '✅ Correto!';
+        feedbackEl.style.color = 'lightgreen';
+    } else {
+        feedbackEl.textContent = `❌ Incorreto! A resposta correta era ${respostaCorreta}`;
+        feedbackEl.style.color = 'tomato';
+    }
+
+    setTimeout(gerarPergunta, 2000); // Gerar nova pergunta após 2 segundos
+}
+
+function iniciarCronometro() {
+    clearInterval(timer); // Limpar qualquer cronômetro anterior
+    tempo = 10;
+    cronometroEl.textContent = `⏱ ${tempo}`;
+
+    timer = setInterval(() => {
+        tempo--;
+        cronometroEl.textContent = `⏱ ${tempo}`;
+        if (tempo === 0) {
+            clearInterval(timer);
+            verificarResposta(null); // Se o tempo acabar, trata como erro
+        }
+    }, 1000);
+}
+
+gerarPergunta();
